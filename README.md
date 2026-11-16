@@ -1,56 +1,73 @@
-# Welcome to your Expo app 👋
+# Products App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplicación móvil multiplataforma para productos, desarrollada con Expo, React Native y TypeScript. El proyecto usa Expo Router para la navegación y está organizado por capas para separar rutas, lógica de autenticación y componentes de presentación.
 
-## Get started
+## Requisitos
 
-1. Install dependencies
+- Node.js compatible con Expo SDK 58.
+- pnpm.
+- Expo Go en un dispositivo físico o un emulador Android/iOS.
+- Un backend disponible para las rutas de autenticación.
 
-   ```bash
-   npm install
-   ```
+## Instalación y ejecución
 
-2. Start the app
+Instala las dependencias:
 
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```powershell
+pnpm install
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+Crea tu archivo local de variables de entorno:
 
-### Other setup steps
+```powershell
+Copy-Item .env.template .env
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+Edita `.env` con las direcciones correctas para tu entorno y luego inicia Expo:
 
-## Learn more
+```powershell
+pnpm start
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+Abre el proyecto con Expo Go o con un emulador desde el menú que aparece en la terminal.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Configuración de la API
 
-## Join the community
+La app selecciona su URL según `EXPO_PUBLIC_STAGE` y la plataforma:
 
-Join our community of developers creating universal apps.
+- `EXPO_PUBLIC_API_URL`: URL de la API para producción.
+- `EXPO_PUBLIC_API_URL_IOS`: URL de la API cuando la app corre en iOS.
+- `EXPO_PUBLIC_API_URL_ANDROID`: URL de la API cuando la app corre en Android.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+En desarrollo, el backend debe exponer la API bajo `/api` y escuchar en el puerto configurado (por defecto, `3000`). Para un teléfono físico, reemplaza `YOUR_PC_IP` por la IPv4 de la computadora en la red Wi-Fi compartida, por ejemplo `192.168.1.22`. No uses `localhost` desde un teléfono: apuntaría al propio dispositivo. En el emulador Android de Android Studio, normalmente se usa `10.0.2.2` para acceder al host. El firewall también debe permitir conexiones entrantes al puerto del backend.
+
+Las variables con prefijo `EXPO_PUBLIC_` se incluyen en el bundle de la app; no guardes secretos ni credenciales privadas en ellas. El archivo `.env` local está excluido de Git.
+
+## Funcionalidad y estado
+
+- Navegación basada en archivos con Expo Router.
+- Rutas iniciales para iniciar sesión, registrarse y acceder al área de productos protegida.
+- Estado de autenticación con Zustand y llamadas HTTP con Axios a `/auth/login` y `/auth/check-status`.
+- Componentes reutilizables con tema claro/oscuro e iconos.
+- Fuentes Kanit Regular, Bold y Thin cargadas desde `assets/fonts`.
+
+La pantalla de registro y la pantalla de inicio de productos son actualmente estructuras iniciales. La integración completa de formularios, persistencia segura del token y registro todavía está pendiente.
+
+## Estructura principal
+
+```text
+src/
+  app/                  Rutas y layouts de Expo Router
+  core/auth/            API, acciones y tipos de autenticación
+  presentation/auth/    Estado de autenticación
+  presentation/theme/   Componentes y hooks de tema
+  constants/            Colores, tipografías y tokens visuales
+assets/fonts/           Archivos de fuentes Kanit
+```
+
+## Verificaciones
+
+```powershell
+pnpm lint
+pnpm exec tsc --noEmit
+```
