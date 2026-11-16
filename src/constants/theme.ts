@@ -14,13 +14,17 @@ export const Colors = {
     backgroundElement: '#F0F0F3',
     backgroundSelected: '#E0E1E6',
     textSecondary: '#60646C',
+
+    primary: '#3D64F4',
   },
   dark: {
     text: '#ffffff',
     background: '#000000',
-    backgroundElement: '#212225',
+    backgroundElement: '#1F2B43',
     backgroundSelected: '#2E3135',
     textSecondary: '#B0B4BA',
+
+    primary: '#3D64F4',
   },
 } as const;
 
@@ -29,7 +33,9 @@ export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
 export const Fonts = Platform.select({
   ios: {
     /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
+    sans: 'KanitRegular',
+    thin: 'KanitThin',
+    bold: 'KanitBold',
     /** iOS `UIFontDescriptorSystemDesignSerif` */
     serif: 'ui-serif',
     /** iOS `UIFontDescriptorSystemDesignRounded` */
@@ -38,13 +44,17 @@ export const Fonts = Platform.select({
     mono: 'ui-monospace',
   },
   default: {
-    sans: 'normal',
+    sans: 'KanitRegular',
+    thin: 'KanitThin',
+    bold: 'KanitBold',
     serif: 'serif',
     rounded: 'normal',
     mono: 'monospace',
   },
   web: {
-    sans: 'var(--font-display)',
+    sans: 'KanitRegular',
+    thin: 'KanitThin',
+    bold: 'KanitBold',
     serif: 'var(--font-serif)',
     rounded: 'var(--font-rounded)',
     mono: 'var(--font-mono)',
