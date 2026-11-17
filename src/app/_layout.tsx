@@ -1,3 +1,5 @@
+import { useTheme } from '@/presentation/theme/hooks/use-theme';
+import ToastHost from '@/presentation/toast/components/toast-host';
 import { useFonts } from 'expo-font';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -9,6 +11,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  const { background } = useTheme();
   const [fontsLoaded, fontError] = useFonts({
     KanitThin: require('../../assets/fonts/Kanit-Thin.ttf'),
     KanitRegular: require('../../assets/fonts/Kanit-Regular.ttf'),
@@ -30,9 +33,10 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView>
+    <GestureHandlerRootView style={{ backgroundColor: background, flex: 1 }}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack screenOptions={{ headerShown: false }}></Stack>
+        <ToastHost />
       </ThemeProvider>
     </GestureHandlerRootView>
   );

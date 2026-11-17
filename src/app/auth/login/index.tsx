@@ -1,8 +1,13 @@
+import { useAuthStore } from '@/presentation/auth/store/useAuthStore';
 import ThemedButton from '@/presentation/theme/components/themed-button';
 import ThemedLink from '@/presentation/theme/components/themed-link';
 import { ThemedText } from '@/presentation/theme/components/themed-text';
 import ThemedTextInput from '@/presentation/theme/components/themed-text-input';
+import { useTheme } from '@/presentation/theme/hooks/use-theme';
+import { router } from 'expo-router';
+import { useState } from 'react';
 import {
+  Alert,
   KeyboardAvoidingView,
   ScrollView,
   useWindowDimensions,
@@ -10,11 +15,37 @@ import {
 } from 'react-native';
 
 const LoginScreen = () => {
+  const { login } = useAuthStore();
   const { height } = useWindowDimensions();
+  const { background } = useTheme();
+
+  const [isPosting, setIsPosting] = useState(false);
+  const [form, setForm] = useState({ email: '', password: '' });
+
+  const onLogin = async () => {
+    const { email, password } = form;
+
+    if (email.length === 0 || password.length === 0) {
+      return;
+    }
+
+    setIsPosting(true);
+    const wasSuccesful = await login(email, password);
+    setIsPosting(false);
+
+    if (wasSuccesful) {
+      router.replace('/');
+      return;
+    }
+
+    Alert.alert('Error', 'Usuario o contraseña no son correctos');
+  };
 
   return (
     <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
-      <ScrollView style={{ paddingHorizontal: 40 }}>
+      <ScrollView
+        style={{ paddingHorizontal: 40, backgroundColor: background }}
+      >
         <View style={{ paddingTop: height * 0.35 }}>
           <ThemedText type="title">Ingresar</ThemedText>
           <ThemedText style={{ color: 'grey' }}>
@@ -29,6 +60,8 @@ const LoginScreen = () => {
             keyboardType="email-address"
             autoCapitalize="none"
             icon="mail-outline"
+            value={form.email}
+            onChangeText={(value) => setForm({ ...form, email: value })}
           />
 
           <ThemedTextInput
@@ -36,6 +69,8 @@ const LoginScreen = () => {
             secureTextEntry
             autoCapitalize="none"
             icon="lock-closed-outline"
+            value={form.password}
+            onChangeText={(value) => setForm({ ...form, password: value })}
           />
         </View>
 
@@ -43,7 +78,13 @@ const LoginScreen = () => {
         <View style={{ marginTop: 10 }} />
 
         {/* Botón */}
-        <ThemedButton icon="arrow-forward-outline">Ingresar</ThemedButton>
+        <ThemedButton
+          icon="arrow-forward-outline"
+          onPress={onLogin}
+          disabled={isPosting}
+        >
+          Ingresar
+        </ThemedButton>
 
         {/* Spacer */}
         <View style={{ marginTop: 50 }} />
