@@ -46,12 +46,15 @@ Las variables con prefijo `EXPO_PUBLIC_` se incluyen en el bundle de la app; no 
 ## Funcionalidad y estado
 
 - Navegación basada en archivos con Expo Router.
-- Rutas iniciales para iniciar sesión, registrarse y acceder al área de productos protegida.
-- Estado de autenticación con Zustand y llamadas HTTP con Axios a `/auth/login` y `/auth/check-status`.
+- Inicio de sesión y registro conectados a los endpoints `/auth/login` y `/auth/register`.
+- Estado de autenticación con Zustand; el token se guarda con `expo-secure-store` y se envía como Bearer token en las solicitudes.
+- Verificación de sesión con `/auth/check-status` y cierre de sesión desde el área protegida.
+- Toast de bienvenida al completar el registro correctamente.
+- Validación básica de campos obligatorios; los requisitos de contraseña y correo dependen del backend. Los errores de registro se muestran con un mensaje genérico.
 - Componentes reutilizables con tema claro/oscuro e iconos.
 - Fuentes Kanit Regular, Bold y Thin cargadas desde `assets/fonts`.
 
-La pantalla de registro y la pantalla de inicio de productos son actualmente estructuras iniciales. La integración completa de formularios, persistencia segura del token y registro todavía está pendiente.
+Todavía no se incluyen flujos de verificación de correo ni recuperación de contraseña.
 
 ## Estructura principal
 
@@ -59,7 +62,9 @@ La pantalla de registro y la pantalla de inicio de productos son actualmente est
 src/
   app/                  Rutas y layouts de Expo Router
   core/auth/            API, acciones y tipos de autenticación
-  presentation/auth/    Estado de autenticación
+  helpers/adapters/     Adaptadores de almacenamiento seguro
+  presentation/auth/    Estado y componentes de autenticación
+  presentation/toast/   Estado y presentación de notificaciones toast
   presentation/theme/   Componentes y hooks de tema
   constants/            Colores, tipografías y tokens visuales
 assets/fonts/           Archivos de fuentes Kanit
