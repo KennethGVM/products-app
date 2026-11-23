@@ -33,6 +33,13 @@
           "imageWidth": 76
         }
       ],
+      [
+        "expo-media-library",
+        {
+          "savePhotosPermission": "Permitir que $(PRODUCT_NAME) guarde fotos en la fototeca.",
+          "granularPermissions": ["photo"]
+        }
+      ],
       "expo-secure-store"
     ],
     "experiments": {
